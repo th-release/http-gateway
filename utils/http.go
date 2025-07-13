@@ -86,6 +86,23 @@ func PutRequest[T any](client *resty.Client, url string, queryParams map[string]
 		req = req.SetHeaders(queryParams)
 	}
 
+	if data != nil {
+		if headers["Content-Type"] == "application/x-www-form-urlencoded" {
+			if formData, ok := data.(map[string]interface{}); ok {
+				formParams := make(map[string]string)
+				for k, v := range formData {
+					// Convert values to string; adjust based on actual types
+					formParams[k] = fmt.Sprintf("%v", v)
+				}
+				req = req.SetBody(nil).SetFormData(formParams)
+			} else {
+				return nil, result, errorResult, fmt.Errorf("data must be a map for x-www-form-urlencoded")
+			}
+		} else {
+			req = req.SetBody(data)
+		}
+	}
+
 	resp, err := req.Put(url)
 
 	if err != nil {
@@ -110,6 +127,23 @@ func DeleteRequest[T any](client *resty.Client, url string, queryParams map[stri
 		req = req.SetHeaders(headers)
 	}
 
+	if data != nil {
+		if headers["Content-Type"] == "application/x-www-form-urlencoded" {
+			if formData, ok := data.(map[string]interface{}); ok {
+				formParams := make(map[string]string)
+				for k, v := range formData {
+					// Convert values to string; adjust based on actual types
+					formParams[k] = fmt.Sprintf("%v", v)
+				}
+				req = req.SetBody(nil).SetFormData(formParams)
+			} else {
+				return nil, result, errorResult, fmt.Errorf("data must be a map for x-www-form-urlencoded")
+			}
+		} else {
+			req = req.SetBody(data)
+		}
+	}
+
 	resp, err := req.Delete(url)
 	if err != nil {
 		return nil, result, errorResult, err
@@ -132,6 +166,23 @@ func PatchRequest[T any](client *resty.Client, url string, queryParams map[strin
 
 	if len(headers) > 0 {
 		req = req.SetHeaders(headers)
+	}
+
+	if data != nil {
+		if headers["Content-Type"] == "application/x-www-form-urlencoded" {
+			if formData, ok := data.(map[string]interface{}); ok {
+				formParams := make(map[string]string)
+				for k, v := range formData {
+					// Convert values to string; adjust based on actual types
+					formParams[k] = fmt.Sprintf("%v", v)
+				}
+				req = req.SetBody(nil).SetFormData(formParams)
+			} else {
+				return nil, result, errorResult, fmt.Errorf("data must be a map for x-www-form-urlencoded")
+			}
+		} else {
+			req = req.SetBody(data)
+		}
 	}
 
 	resp, err := req.Patch(url)
