@@ -7,6 +7,7 @@ import (
 )
 
 func Get(c *fiber.Ctx) error {
+	config := utils.GetConfig()
 	var query GeneralRequest
 
 	if err := c.QueryParser(&query); err != nil {
@@ -30,7 +31,15 @@ func Get(c *fiber.Ctx) error {
 		}
 	}
 
-	_, res, errResp, err := utils.GetRequest[interface{}](client, query.Url, nil, headers)
+	url, err := utils.XorDecrypt(query.Url, config.Secret)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"success": false,
+			"message": err.Error(),
+		})
+	}
+
+	_, res, errResp, err := utils.GetRequest[interface{}](client, url, nil, headers)
 
 	if err != nil || errResp != nil {
 		return c.Status(500).JSON(errResp)
@@ -40,6 +49,7 @@ func Get(c *fiber.Ctx) error {
 }
 
 func Post(c *fiber.Ctx) error {
+	config := utils.GetConfig()
 	var query GeneralRequest
 
 	if err := c.QueryParser(&query); err != nil {
@@ -72,7 +82,15 @@ func Post(c *fiber.Ctx) error {
 		})
 	}
 
-	_, res, errResp, err := utils.PostRequest[interface{}](client, query.Url, nil, headers, data)
+	url, err := utils.XorDecrypt(query.Url, config.Secret)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"success": false,
+			"message": err.Error(),
+		})
+	}
+
+	_, res, errResp, err := utils.PostRequest[interface{}](client, url, nil, headers, data)
 
 	if err != nil || errResp != nil {
 		return c.Status(500).JSON(errResp)
@@ -82,6 +100,7 @@ func Post(c *fiber.Ctx) error {
 }
 
 func Put(c *fiber.Ctx) error {
+	config := utils.GetConfig()
 	var query GeneralRequest
 
 	if err := c.QueryParser(&query); err != nil {
@@ -114,7 +133,15 @@ func Put(c *fiber.Ctx) error {
 		})
 	}
 
-	_, res, errResp, err := utils.PutRequest[interface{}](client, query.Url, nil, headers, data)
+	url, err := utils.XorDecrypt(query.Url, config.Secret)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"success": false,
+			"message": err.Error(),
+		})
+	}
+
+	_, res, errResp, err := utils.PutRequest[interface{}](client, url, nil, headers, data)
 
 	if err != nil || errResp != nil {
 		return c.Status(500).JSON(errResp)
@@ -124,6 +151,7 @@ func Put(c *fiber.Ctx) error {
 }
 
 func Delete(c *fiber.Ctx) error {
+	config := utils.GetConfig()
 	var query GeneralRequest
 
 	if err := c.QueryParser(&query); err != nil {
@@ -156,7 +184,15 @@ func Delete(c *fiber.Ctx) error {
 		})
 	}
 
-	_, res, errResp, err := utils.DeleteRequest[interface{}](client, query.Url, nil, headers, data)
+	url, err := utils.XorDecrypt(query.Url, config.Secret)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"success": false,
+			"message": err.Error(),
+		})
+	}
+
+	_, res, errResp, err := utils.DeleteRequest[interface{}](client, url, nil, headers, data)
 
 	if err != nil || errResp != nil {
 		return c.Status(500).JSON(errResp)
@@ -166,6 +202,7 @@ func Delete(c *fiber.Ctx) error {
 }
 
 func Patch(c *fiber.Ctx) error {
+	config := utils.GetConfig()
 	var query GeneralRequest
 
 	if err := c.QueryParser(&query); err != nil {
@@ -198,7 +235,15 @@ func Patch(c *fiber.Ctx) error {
 		})
 	}
 
-	_, res, errResp, err := utils.PatchRequest[interface{}](client, query.Url, nil, headers, data)
+	url, err := utils.XorDecrypt(query.Url, config.Secret)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"success": false,
+			"message": err.Error(),
+		})
+	}
+
+	_, res, errResp, err := utils.PatchRequest[interface{}](client, url, nil, headers, data)
 
 	if err != nil || errResp != nil {
 		return c.Status(500).JSON(errResp)
