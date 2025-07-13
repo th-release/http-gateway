@@ -1,6 +1,7 @@
 package api
 
 import (
+	"cth.release/http-gateway/api/gateway"
 	"cth.release/http-gateway/utils"
 	"github.com/gofiber/fiber/v2"
 )
@@ -37,9 +38,9 @@ func (s *ServerConfig) setupRoutes() {
 		})
 	})
 
-	apiGroup.Get("/")
-	apiGroup.Post("/")
-	apiGroup.Put("/")
-	apiGroup.Delete("/")
-	apiGroup.Patch("/")
+	apiGroup.Get("/", gateway.Get)
+	apiGroup.Post("/", gateway.Post)
+	apiGroup.Put("/", gateway.Put)
+	apiGroup.Delete("/", gateway.Delete)
+	apiGroup.Patch("/", gateway.Patch)
 }
