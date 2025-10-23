@@ -2,17 +2,29 @@ version: "3.8"
 
 services:
   gateway:
-    image: http-gateway
+    image: http-gateway:1.0.0
     restart: always
     environment:
-      - LOGGING=true
       - SECRET=1234
       - PORT=8080
       - AUTH_KEY=1234
       - TAILSCALE_HOSTNAME=http-gateway
     ports:
-      - "80:80/tcp"
+      - "60000:8080/tcp"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.forwarding=1
+    devices:
+      - /dev/net/tun:/dev/net/tun
     logging:
       options:
         max-size: "1024m"
         max-file: "5"
+    volumes:
+      - tailscale-data:/var/cache/tailscale
+
+volumes:
+  tailscale-data:
