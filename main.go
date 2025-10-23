@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"time"
@@ -11,22 +10,6 @@ import (
 )
 
 func main() {
-	port := flag.Int("PORT", 8080, "PORT Integer Default: 8080")
-	secret := flag.String("SECRET", "XOR", "SECRET String Default: XOR")
-	logging := flag.Bool("LOGGING", true, "LOGGING Boolean Default: true")
-
-	flag.Parse()
-
-	err := utils.SetConfig(&utils.Config{
-		Port:    *port,
-		Secret:  *secret,
-		Logging: *logging,
-	})
-
-	if err != nil {
-		log.Fatalf("Config 저장중 에러 발생 %s", err.Error())
-	}
-
 	config := utils.GetConfig()
 
 	if config == nil {
@@ -43,5 +26,5 @@ func main() {
 
 	log.Println(time.Now())
 
-	app.App.Listen(fmt.Sprintf(":%d", config.Port))
+	app.App.Listen(fmt.Sprintf(":%s", config.Port))
 }

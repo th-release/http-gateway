@@ -7,9 +7,8 @@ type BasicResponse struct {
 }
 
 type Config struct {
-	Port    int    `json:"PORT"`
-	Secret  string `json:"SECRET"`
-	Logging bool   `json:"LOGGING"`
+	Port   string `json:"PORT"`
+	Secret string `json:"SECRET"`
 }
 
 type Meta struct {
